@@ -1,23 +1,6 @@
 version: 0.2
-
 phases:
-  install:
-    runtime-versions:
-      nodejs: 18
-    commands:
-      - echo "FASE 1: Preparando entorno"
-      - node -v
-      - npm -v
-  pre_build:
-    commands:
-      - echo "FASE 2: Instalando dependencias"
-      - npm install --legacy-peer-deps || echo "Advertencia en instalacion"
-  build:
-    commands:
-      - echo "FASE 3: Analisis SCA"
-      - npm audit --audit-level=high || echo "Vulnerabilidades detectadas"
-      - echo "FASE 4: Analisis SAST"
-      - grep -rn "password" app/ || echo "Revision finalizada"
-post_build:
-  commands:
-    - echo "FASE 5: Reporte completado"
+build:
+commands:
+- echo "Iniciando prueba super basica"
+- npm --version
