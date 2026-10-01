@@ -1,6 +1,6 @@
 version: 0.2
 phases:
-build:
-commands:
-- echo "Iniciando prueba super basica"
-- npm --version
+  build:
+    commands:
+      - echo "Iniciando prueba super basica"
+      - npm --version
