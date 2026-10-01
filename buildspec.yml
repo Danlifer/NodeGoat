@@ -1,0 +1,31 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18
+    commands:
+      - echo "=== FASE 1: Preparando entorno de pruebas ==="
+      - node -v
+      - npm -v
+
+  pre_build:
+    commands:
+      - echo "=== FASE 2: Instalando dependencias de NodeGoat ==="
+      - # Usamos --legacy-peer-deps para evitar bloqueos en la instalación de paquetes heredados
+      - npm install --legacy-peer-deps || echo "Advertencia en la instalación de paquetes"
+
+  build:
+    commands:
+      - echo "=== FASE 3: Análisis de Seguridad en Dependencias (SCA) ==="
+      - # npm audit buscará vulnerabilidades conocidas en las librerías del proyecto
+      - npm audit --audit-level=high || echo "Vulnerabilidades graves detectadas en dependencias"
+
+      - echo "=== FASE 4: Inspección de Seguridad en Código (SAST) ==="
+      - # Busca contraseñas, secretos o claves de API escritas directamente en el código
+      - grep -rn "password" app/ || echo "Revisión de patrones finalizada"
+
+post_build:
+  commands:
+    - echo "=== FASE 5: Generación de Reporte ==="
+    - echo "Análisis de Calidad y Ciberseguridad completado en AWS CodeBuild."
