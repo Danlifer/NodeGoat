@@ -4,23 +4,14 @@ phases:
     runtime-versions:
       nodejs: 18
     commands:
-      - echo "=== FASE 1: Preparando entorno de pruebas ==="
       - node -v
       - npm -v
 
   pre_build:
     commands:
-      - echo "=== FASE 2: Instalando dependencias de NodeGoat ==="
       - npm install --legacy-peer-deps || echo "Advertencia en la instalacion"
 
   build:
     commands:
-      - echo "=== FASE 3: Analisis de Seguridad en Dependencias (SCA) ==="
       - npm audit --audit-level=high || echo "Vulnerabilidades detectadas"
-      - echo "=== FASE 4: Inspeccion de Seguridad en Codigo (SAST) ==="
       - grep -rn "password" app/ || echo "Revision finalizada"
-
-post_build:
-  commands:
-    - echo "=== FASE 5: Generacion de Reporte ==="
-    - echo "Analisis de Calidad y Ciberseguridad completado en AWS CodeBuild."
