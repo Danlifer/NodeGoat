@@ -1,4 +1,5 @@
 version: 0.2
+
 phases:
   install:
     runtime-versions:
@@ -9,9 +10,16 @@ phases:
 
   pre_build:
     commands:
+      - echo "Instalando dependencias de NodeGoat..."
       - npm install --legacy-peer-deps || echo "Advertencia en la instalacion"
 
   build:
     commands:
-      - npm audit --audit-level=high || echo "Vulnerabilidades detectadas"
-      - grep -rn "password" app/ || echo "Revision finalizada"
+      - echo "Ejecutando SCA y generando reporte HTML..."
+      - npm audit --json | npx --yes npm-audit-html --output report.html || echo "Reporte HTML generado"
+      - echo "Ejecutando SAST basico..."
+      - grep -rn "password" app/ || echo "Revision SAST finalizada"
+
+artifacts:
+  files:
+    - report.html
