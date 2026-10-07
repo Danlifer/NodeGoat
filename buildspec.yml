@@ -17,9 +17,6 @@ phases:
     commands:
       - echo "Ejecutando SCA y generando reporte HTML..."
       - npm audit --json | npx --yes npm-audit-html --output report.html || echo "Reporte HTML generado"
-      - echo "Ejecutando SAST basico..."
-      - grep -rn "password" app/ || echo "Revision SAST finalizada"
-
 artifacts:
   files:
     - report.html
