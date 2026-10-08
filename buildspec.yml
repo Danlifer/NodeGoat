@@ -5,18 +5,20 @@ phases:
     runtime-versions:
       nodejs: 18
     commands:
-      - node -v
-      - npm -v
+      - curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+      - trivy --version
 
   pre_build:
     commands:
-      - echo "Instalando dependencias de NodeGoat..."
       - npm install --legacy-peer-deps || echo "Advertencia en la instalacion"
 
   build:
     commands:
-      - echo "Ejecutando SCA y generando reporte HTML..."
-      - npm audit --json | npx --yes npm-audit-html --output report.html || echo "Reporte HTML generado"
+      - # Imprime el resumen directo en la consola de AWS CodeBuild
+      - trivy fs . --severity HIGH,CRITICAL || echo "Vulnerabilidades detectadas por Trivy"
+      - wget https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/html.tpl -O html.tpl
+      - trivy fs . --format template --template "@html.tpl" -o trivy-report.html || echo "Reporte HTML generado"
+      
 artifacts:
   files:
-    - report.html
+    - trivy-report.html
